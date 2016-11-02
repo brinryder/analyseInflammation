@@ -1,0 +1,87 @@
+---
+title: "R Novice Inflammation data analysyz"
+author: "Brin"
+date: "2 November 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(ggplot2)
+library(dplyr)
+```
+
+```{r data}
+data("mtcars")
+mtcars
+anumber <- 42
+```
+
+
+#a bullet list
+- bullet 1
+- bullet fucking 2
+- bullet likes it's cool
+
+#n italicised word
+_Italy_ or *Greece*
+
+#a bolded word
+__United States__ or **Another bold country**
+
+# has each type of header (1,2,3)
+## each type
+### of header
+
+#a number computed inline from R
+```{r}
+2+2
+```
+
+
+# a table showing the means of a variable grouped on a different variable
+```{r}
+mtcars %>% group_by(cyl) %>% summarise(mpg_means = mean(mpg)) %>% View()
+```
+
+```{r bitshewants, warning=FALSE, echo=TRUE}
+# and R code block that is shown in the output that creates a dot plot
+plot(c(1:100),c(1:100))
+
+# an R code black that is shown and that creates a boxplot for each group
+mtcars %>% group_by(cyl) %>% summarise(mpg_means = mean(mpg)) %>% ggplot(aes(x = mpg_means, y = hp, group = cyl)) + geom_boxplot()
+
+# an R code bloack that isn't shown and that creates a histogram
+```
+
+```{r doit, warning=FALSE, include=FALSE, echo=FALSE}
+magic <- c("Monkey", "Dog", "Fish", "Zebra", "Cat", "Long horse", "Cantaloupe", "Tiger", "Beetle", "Leopard", "Snail", "Chihuahua", "Yes")
+loadPtData <- function(datadir,datapattern, printall, makepdf, domagic)
+{
+  if(makepdf) pdf(paste0("Report ",Sys.Date(),".pdf"))
+  i <- 0
+  filenames = list.files(path=datadir,pattern=datapattern,full.names=TRUE)
+  for(ptfile in filenames) 
+  {
+    i <- i + 1
+    ptid <- as.numeric(regmatches(ptfile, regexpr("[0-9].*[0-9]", ptfile)))
+    print(as.numeric(ptid))
+    if(domagic) ptid <- rownames(mtcars)[ptid]
+    print(paste("Looking at",ptfile))
+    ptdata <- read.csv(paste(getwd(),ptfile, sep = "/"), header = FALSE)
+    par(mfrow=c(2,3))
+    plot(apply(ptdata,2,mean), main=paste("Patient",ptid), ylab="Mean inflammations", pch="$", asp=1)
+    if(printall)
+    {
+      plot(apply(ptdata,2,min), main=paste("Patient",ptid), ylab="Minimum inflammations", pch="@", asp=1)
+      plot(apply(ptdata,2,max), main=paste("Patient",ptid), ylab="Maximum inflammations", pch="&", asp=1)
+    }
+  }
+  if(makepdf) dev.off()
+  #if(printall & !makepdf & domagic) summary(read.FCS("C:/Users/Brin/Desktop/Uni/2016/Experiments/BMR1611 - ILC sorting pilot 7/161030 1611 ILC sort pilot 7 Fortessa/1611_1 neg MACS_013.fcs"))
+}
+```
+
+HI SAMMMMMMMMMMM
+
+```{r main, warning=FALSE}
+loadPtData("data","inflammation.*csv", TRUE, FALSE, TRUE)
