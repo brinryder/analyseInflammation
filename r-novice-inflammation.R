@@ -12,7 +12,7 @@ loadPtData <- function(datadir,datapattern, printall, makepdf, domagic)
     if(domagic) ptid <- magic[ptid]
     print(paste("Looking at",ptfile))
     ptdata <- read.csv(paste(getwd(),ptfile, sep = "/"), header = FALSE)
-    par(mfrow=c(2,3))
+    if(makepdf) par(mfrow=c(2,3))
     plot(apply(ptdata,2,mean), main=paste("Patient",ptid), ylab="Mean inflammations")
     if(printall)
     {
