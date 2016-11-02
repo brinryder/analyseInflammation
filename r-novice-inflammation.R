@@ -1,3 +1,4 @@
+
 magic <- c("Monkey", "Dog", "Fish", "Zebra", "Cat", "Long horse", "Cantaloupe", "Tiger", "Beetle", "Leopard", "Snail", "Chihuahua", "Yes")
 loadPtData <- function(datadir,datapattern, printall, makepdf, domagic)
 {
