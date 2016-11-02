@@ -1,20 +1,24 @@
-loadPtData <- function(datadir,datapattern)
+magic <- c("Monkey", "Dog", "Fish", "Zebra", "Cat", "Long horse", "Cantaloupe", "Tiger", "Beetle", "Leopard", "Snail", "Chihuahua", "Yes")
+loadPtData <- function(datadir,datapattern, printall, makepdf, domagic)
 {
-  pdf(paste("Report ",Sys.Date(),".pdf"))
+  if(makepdf) pdf(paste("Report ",Sys.Date(),".pdf"))
   i <- 0
   filenames = list.files(path=datadir,pattern=datapattern,full.names=TRUE)
   for(ptfile in filenames) 
   {
     i <- i + 1
+    ptid <- as.numeric(regmatches(ptfile, regexpr("[0-9].*[0-9]", ptfile)))
+    print(as.numeric(ptid))
+    if(domagic) ptid <- magic[ptid]
     print(paste("Looking at",ptfile))
     ptdata <- read.csv(paste(getwd(),ptfile, sep = "/"), header = FALSE)
-    ssmean <- apply(ptdata,2,mean)
-    ssmin <- apply(ptdata,2,min)
-    ssmax <- apply(ptdata,2,max)
-    par(mfrow=c(2,2))
-    plot(ssmean)
-    plot(ssmin)
-    plot(ssmax)
+    par(mfrow=c(2,3))
+    plot(apply(ptdata,2,mean), main=paste("Patient",ptid), ylab="Mean inflammations")
+    if(printall)
+    {
+      plot(apply(ptdata,2,min), main=paste("Patient",ptid), ylab="Minimum inflammations")
+      plot(apply(ptdata,2,max), main=paste("Patient",ptid), ylab="Maximum inflammations")
+    }
   }
-  dev.off()
+  if(makepdf) dev.off()
 }
